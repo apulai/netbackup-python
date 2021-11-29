@@ -26,6 +26,8 @@ header_v3 = {'Accept': nbu_api_content_type_v3,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v3}
 
+export_data = {'nbu_api_baseurl': nbu_api_baseurl,
+             'nbu_api_key': nbu_api_key}
 
 # This helper function will print the parsed json (dictionary)
 # in an easy to use format.
@@ -94,6 +96,10 @@ i = int(input("Please enter the idx of the VM: "))
 my_display_name = parsed1['data'][i]['attributes']['commonAssetAttributes']['displayName']
 my_vcenter = parsed1['data'][i]['attributes']['vCenter']
 my_vm_absolutepath = parsed1['data'][i]['attributes']['vmAbsolutePath']
+my_id = parsed1['data'][i]['id']
+
+export_data['displayName']=my_display_name
+export_data['id']=my_id
 
 t_now = datetime.now()
 t_30_days_ago = t_now - timedelta(days=30)
@@ -213,6 +219,13 @@ my_data = {
 
 my_obj = {"data": my_data}
 
+export_data['vCenter']=my_vcenter
+export_data['esxiHost']=my_esxi_host
+export_data['resourcePoolOrVapp']=my_resourcePoolOrVapp
+export_data['vmName']=my_new_name
+export_data['powerOn']=my_power_on
+export_data['removeEthCards']=my_remove_eth_cards
+
 print("POST IA start ... ")
 print("header:", header_v3)
 print("body:", my_obj)
@@ -226,3 +239,9 @@ print(response.status_code)
 print(response)
 parsed = response.json()
 print(json.dumps(parsed, indent=4, sort_keys=True))
+print("Exporting data for scheduled runs...")
+print(json.dumps(export_data, indent=4, sort_keys=True))
+
+with open('exports/vm_'+my_id+'.txt', 'w') as data_file:
+         data_file.write(json.dumps(export_data))
+print(" done.")
