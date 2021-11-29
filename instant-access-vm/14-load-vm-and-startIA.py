@@ -1,6 +1,7 @@
 import json
 import requests
 from datetime import datetime, timedelta
+import sys
 
 # This call will disable invalid https certificate disable_warnings
 requests.urllib3.disable_warnings()
@@ -14,6 +15,7 @@ nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
 nbu_api_content_type_v3 = "application/vnd.netbackup+json;version=3.0"
 
+
 header_v6 = {'Accept': nbu_api_content_type_v6,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v6}
@@ -25,9 +27,6 @@ header_v5 = {'Accept': nbu_api_content_type_v5,
 header_v3 = {'Accept': nbu_api_content_type_v3,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v3}
-
-export_data = {'nbu_api_baseurl': nbu_api_baseurl,
-             'nbu_api_key': nbu_api_key}
 
 # This helper function will print the parsed json (dictionary)
 # in an easy to use format.
@@ -60,6 +59,24 @@ params = {
     }
 }
 
+if len(sys.argv) < 2:
+    print("Usage: ",sys.argv[0]," file_with_vm_json_data")
+    quit(1)
+
+# reading the data from the file
+try:
+    f = open(sys.argv[1], 'rb')
+except OSError:
+    print ("Could not open/read file:", sys.argv[1])
+    sys.exit()
+with f:
+    data = f.read()
+
+# reconstructing the data as a dictionary
+import_data = json.loads(data)
+
+print(import_data)
+
 print("GET vmware assests ...", end=" ")
 response = requests.get(nbu_api_baseurl +
                         "/asset-service/workloads/vmware/assets",
@@ -78,28 +95,31 @@ if response.status_code != 200:
 # print_dict_path('',parsed1)
 
 # print VM assets on screen
+i = -1
 for idx, item in enumerate(parsed1['data']):
     if item['attributes']['assetType'] == 'vm':
-        print("Index:", idx)
-        print("Display name:\t", item['attributes']['commonAssetAttributes']['displayName'])
-        print("id (referenced by NBU):\t", item['id'])
-        print("instanceUuid:\t", item['attributes']['instanceUuid'])
-        print("assetType:\t", item['attributes']['assetType'])
-        print("vCenter:\t", item['attributes']['vCenter'])
-        print("vmAbsolutePath:\t", item['attributes']['vmAbsolutePath'])
-        print("lastDiscoveredTime:\t", item['attributes']['commonAssetAttributes']['detection']['lastDiscoveredTime'])
-        print("nicIpAddresses:\t", item['attributes']['nicIpAddresses'])
-        print("")
+        if item['id'] == import_data['id']:
+            i = idx
+            print("Found VM at index:", idx)
+            print("Display name:\t", item['attributes']['commonAssetAttributes']['displayName'])
+            print("id (referenced by NBU):\t", item['id'])
+            print("instanceUuid:\t", item['attributes']['instanceUuid'])
+            print("assetType:\t", item['attributes']['assetType'])
+            print("vCenter:\t", item['attributes']['vCenter'])
+            print("vmAbsolutePath:\t", item['attributes']['vmAbsolutePath'])
+            print("lastDiscoveredTime:\t", item['attributes']['commonAssetAttributes']['detection']['lastDiscoveredTime'])
+            print("nicIpAddresses:\t", item['attributes']['nicIpAddresses'])
+            print("")
 
-i = int(input("Please enter the idx of the VM: "))
+if i == -1:
+    print("Netbackup VM id not found in current VM list:", import_data['id'], import_data['displayName'])
+    quit(1)
+
 
 my_display_name = parsed1['data'][i]['attributes']['commonAssetAttributes']['displayName']
 my_vcenter = parsed1['data'][i]['attributes']['vCenter']
 my_vm_absolutepath = parsed1['data'][i]['attributes']['vmAbsolutePath']
 my_id = parsed1['data'][i]['id']
-
-export_data['displayName']=my_display_name
-export_data['id']=my_id
 
 t_now = datetime.now()
 t_30_days_ago = t_now - timedelta(days=30)
@@ -149,25 +169,15 @@ if len(parsed2['data']) == 0:
     print("No backups found ...")
     quit(1)
 
-
 print()
-print("Backups:")
-for idx, item in enumerate(parsed2['data']):
-    print("Index:\t", idx)
-    print("Backup time:\t", item['attributes']['backupTime'])
-    print("id (referenced by NBU):\t", item['id'])
-    print("JobID:\t", item['attributes']['extendedAttributes']['imageAttributes']['jobId'])
-    print("copyNumber:\t", item['attributes']['extendedAttributes']['imageAttributes']['fragments'][0]['copyNumber'])
-    print("")
-
-idx = int(input("Please enter backup index: (default: 0 for latest) ") or 0)
+print("Found at least 1 backup...")
+# Automatically selecting last backup
+idx = 0
 
 my_backup_id = parsed2['data'][idx]['id']
 my_copy_number = parsed2['data'][idx]['attributes']['extendedAttributes']['imageAttributes']['fragments'][0]['copyNumber']
 proposed_name = my_display_name + "-IA-" + t_now.strftime('%Y%m%dT%H%M%SZ')
-my_new_name = input("Please enter a new Name of the Instant Access VM: (default: " + proposed_name + ")") or proposed_name
-my_power_on = input("PowerOn (True / False): (default: True) ") or "True"
-my_remove_eth_cards = input("removeEthCards (True/False): (default: True) ") or "True"
+
 
 # Preparing to get additional info
 params = {
@@ -197,9 +207,13 @@ for idx, item in enumerate(parsed3['included']):
         my_esxi_host = item['attributes']['esxiServer']
         my_resourcePoolOrVapp = item['attributes']['resourcePoolOrVapp']
 
-my_esxi_host = input("Please enter a new esxiHost: (default: " + my_esxi_host + ")") or my_esxi_host
-my_resourcePoolOrVapp = input(
-    "Please enter a new resource-pool or vApp: (default: " + my_resourcePoolOrVapp + ")") or my_resourcePoolOrVapp
+my_vcenter=import_data['vCenter']
+my_esxi_host=import_data['esxiHost']
+my_resourcePoolOrVapp=import_data['resourcePoolOrVapp']
+my_new_name=proposed_name
+my_power_on=import_data['powerOn']
+my_remove_eth_cards=import_data['removeEthCards']
+
 
 # Preparing to POST to start IA machine
 my_attributes = {
@@ -223,14 +237,7 @@ my_data = {
 
 my_obj = {"data": my_data}
 
-export_data['vCenter']=my_vcenter
-export_data['esxiHost']=my_esxi_host
-export_data['resourcePoolOrVapp']=my_resourcePoolOrVapp
-export_data['vmName']=my_new_name
-export_data['powerOn']=my_power_on
-export_data['removeEthCards']=my_remove_eth_cards
-
-print("POST request to start IA ... )
+print("POST request to start IA ... ")
 print("header:", header_v3)
 print("body:", my_obj)
 response = requests.post(nbu_api_baseurl +
@@ -243,9 +250,3 @@ print(response.status_code)
 print(response)
 parsed = response.json()
 print(json.dumps(parsed, indent=4, sort_keys=True))
-print("Exporting data for scheduled runs...")
-print(json.dumps(export_data, indent=4, sort_keys=True))
-
-with open('exports/vm_'+my_id+'.txt', 'w') as data_file:
-         data_file.write(json.dumps(export_data))
-print(" done.")
