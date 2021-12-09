@@ -83,6 +83,7 @@ for idx, item in enumerate(parsed1['data']):
     print("Index\t:", idx)
     print("Type\t:",item['type'])
     print("ID\t:",item['id'])
+    print("policyName\t:",item['attributes']['policyName'])
     print("policyType\t:",item['attributes']['policyType'])
     print("clientName\t:",item['attributes']['clientName'])
     print("scheduleType\t:",item['attributes']['scheduleType'])
@@ -156,10 +157,10 @@ params = {
 }
 
 urlwithrequestid='/catalog/images/contents/'+requestId
-time.sleep(10)
+time.sleep(1)
 print("\nGET detailed data on catalog images ",urlwithrequestid, " ...", end=" ")
-tries=0
-while tries < 5:
+finalpage=0
+while  finalpage != 1:
     response = requests.get(nbu_api_baseurl +
                         urlwithrequestid,
                         params=params,
@@ -169,9 +170,10 @@ while tries < 5:
     print("done:", response.status_code)
 
     if response.status_code != 200 and response.status_code != 202:
-        print("Error:", response)
-        quit(1)
+        finalpage = 1
+        continue
     # print(json.dumps(parsed2, indent=4, sort_keys=True))
     # print(type(response), type(parsed2))
     print_dict_path('',parsed4)
-    time.sleep(10)
+    for idx,item in enumerate(parsed4['data']):
+        print(item['attributes']['filePath']," : ",item['attributes']['fileSize'])
