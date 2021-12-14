@@ -48,7 +48,7 @@ def print_dict_path(path, obj):
 
 # Preparing to get catalog data
 t_now = datetime.now()
-t_30_days_ago = t_now - timedelta(days=4)
+t_30_days_ago = t_now - timedelta(days=30)
 print(t_now.strftime('%Y-%m-%dT%H:%M:%SZ'), t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
 params = {
@@ -121,7 +121,7 @@ if not (response.status_code == 200 or response.status_code == 202):
 # print(json.dumps(parsed2, indent=4, sort_keys=True))
 # print(type(response), type(parsed2))
 #print_dict_path('',parsed2)
-requestid=parsed2['requestId']
+requestId=parsed2['requestId']
 
 params = {
     'page': {
@@ -130,6 +130,11 @@ params = {
         'offset': 0
     },
     }
+
+print("------------------------")
+print("Printing set details:")
+print("------------------------")
+
 
 urlwithrequestid='/catalog/images/contents/'+requestId
 
@@ -154,10 +159,13 @@ while True:
     except IndexError:
         printdetails = 0
 
+
     if printdetails == 1:
         for idx,item in enumerate(parsed4['data']):
             print(counter, ":", item['attributes']['filePath']," : ",item['attributes']['fileSize'])
             counter=counter+1
+            print("Most rawban ugyanaz:")
+            print_dict_path('',parsed4)
     else:
         # print(json.dumps(parsed2, indent=4, sort_keys=True))
         # print(type(response), type(parsed2))
