@@ -107,7 +107,7 @@ params = {
     }
     }
 
-print("\nGET backupid contents data  ...", end=" ")
+print("\nGET generating request id for details ...", end=" ")
 response = requests.get(nbu_api_baseurl +
                         '/catalog/images/'+backupid+'/contents',
                         params=params,
@@ -115,14 +115,12 @@ response = requests.get(nbu_api_baseurl +
                         headers=header_v3)
 print("done:", response)
 parsed2 = response.json()
-
-
 if not (response.status_code == 200 or response.status_code == 202):
     print("Error:", response)
     quit(1)
 # print(json.dumps(parsed2, indent=4, sort_keys=True))
 # print(type(response), type(parsed2))
-print_dict_path('',parsed2)
+#print_dict_path('',parsed2)
 requestid=parsed2['requestId']
 
 params = {
@@ -133,24 +131,38 @@ params = {
     },
     }
 
-urlwithrequestid='/catalog/images/contents/'+requestid
-time.sleep(1)
-print("\nGET detailed data on catalog images ",urlwithrequestid, " ...", end=" ")
-finalpage=0
-while  finalpage != 1:
+urlwithrequestid='/catalog/images/contents/'+requestId
+
+counter=1
+while True:
     response = requests.get(nbu_api_baseurl +
                         urlwithrequestid,
                         params=params,
                         verify=False,
-                        headers=header_v3)
+                        headers=header_v5)
     parsed4 = response.json()
-    print("done:", response.status_code)
 
     if response.status_code != 200 and response.status_code != 202:
-        finalpage = 1
-        continue
-    # print(json.dumps(parsed2, indent=4, sort_keys=True))
-    # print(type(response), type(parsed2))
-    print_dict_path('',parsed4)
-    for idx,item in enumerate(parsed4['data']):
-        print(item['attributes']['filePath']," : ",item['attributes']['fileSize'])
+        break
+
+    # we have this key usually if policy is standard at least
+    try:
+        value = parsed4['data'][0]['attributes']['filePath']
+        printdetails = 1
+    except KeyError:
+        printdetails = 0
+    except IndexError:
+        printdetails = 0
+
+    if printdetails == 1:
+        for idx,item in enumerate(parsed4['data']):
+            print(counter, ":", item['attributes']['filePath']," : ",item['attributes']['fileSize'])
+            counter=counter+1
+    else:
+        # print(json.dumps(parsed2, indent=4, sort_keys=True))
+        # print(type(response), type(parsed2))
+        print_dict_path('',parsed4)
+
+    time.sleep(1)
+
+print("process finished")
