@@ -72,14 +72,14 @@ response = requests.get(nbu_api_baseurl +
                         verify=False,
                         headers=header_v3)
 parsed1 = response.json()
-print("done:", parsed1)
+print("done:", response.status_code)
 
 if response.status_code != 200:
     print("Error:", response)
     quit(1)
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
-#print_dict_path('',parsed1)
+print_dict_path('',parsed1)
 
 # print catalog data on screen
 for idx, item in enumerate(parsed1['data']):
@@ -113,7 +113,7 @@ response = requests.get(nbu_api_baseurl +
                         params=params,
                         verify=False,
                         headers=header_v3)
-print("done:", response)
+print("done:", response.status_code)
 parsed2 = response.json()
 if not (response.status_code == 200 or response.status_code == 202):
     print("Error:", response)
