@@ -9,7 +9,6 @@ requests.urllib3.disable_warnings()
 nbu_api_key = "A8fmNjyB5DvvzAN1CnRWblMv160U1Vt5hs5P2fqj81pJh9224HRus-w9YuXnwSMa"
 nbu_api_hostname = "nbumaster.lab.local"
 nbu_api_baseurl = "https://" + nbu_api_hostname + ":1556/netbackup"
-asset_id = "84ba26e1-bd89-45c6-9ad4-196b0d8f9287"
 
 nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
@@ -58,6 +57,11 @@ params = {
         'disable': 'true',
         'offset': 0
     },
+    #'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
+    #'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and clientName eq 'TSTCLUSQLEKR02' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'VMware' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
     # 'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
     'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
 }
