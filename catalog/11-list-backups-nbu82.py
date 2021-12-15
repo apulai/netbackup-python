@@ -135,11 +135,8 @@ print(i)
 backupid=parsed1['data'][i]['id']
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    }
+        'page[limit]': 10,
+        'page[offset]': 0
     }
 
 
@@ -160,12 +157,10 @@ if not (response.status_code == 200 or response.status_code == 202):
 requestId=parsed2['requestId']
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
+        'page[limit]': 10,
+        'page[offset]': 0
     }
+
 
 print("------------------------")
 print("Printing set details:")

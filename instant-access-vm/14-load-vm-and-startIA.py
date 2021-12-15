@@ -53,11 +53,10 @@ def print_dict_path(path, obj):
 #     &page%5Bdisable%5D=true"
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true'
+        'page[limit]': 10,
+        'page[offset]': 0
     }
-}
+
 
 if len(sys.argv) < 2:
     print("Usage: ",sys.argv[0]," file_with_vm_json_data")
@@ -139,12 +138,8 @@ print()
 #           &filter=assetId+eq+%27"+asset_id+"%27+and+%28backupTime+ge+2021-11-01T00%3A00%3A00.000Z%29
 #           &include=optionalVmwareRecoveryPointInfo",
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
-    # 'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
+    'page[limit]': 10,
+    'page[offset]': 0,
     'filter': "assetId eq '" + asset_id + "' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")",
     'include': 'optionalVmwareRecoveryPointInfo'
 }

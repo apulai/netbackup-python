@@ -51,11 +51,10 @@ def print_dict_path(path, obj):
 #     ?page%5Blimit%5D=10
 #     &page%5Bdisable%5D=true"
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true'
+        'page[limit]': 10,
+        'page[offset]': 0
     }
-}
+
 
 print("GET vmware assets ...", end=" ")
 response = requests.get(nbu_api_baseurl +
