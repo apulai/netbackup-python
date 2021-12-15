@@ -226,7 +226,7 @@ export_data['vmName']=my_new_name
 export_data['powerOn']=my_power_on
 export_data['removeEthCards']=my_remove_eth_cards
 
-print("POST request to start IA ... )
+print("POST request to start IA ... ")
 print("header:", header_v3)
 print("body:", my_obj)
 response = requests.post(nbu_api_baseurl +
