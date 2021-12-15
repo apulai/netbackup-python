@@ -52,54 +52,86 @@ t_30_days_ago = t_now - timedelta(days=30)
 print(t_now.strftime('%Y-%m-%dT%H:%M:%SZ'), t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
 params = {
-    'page': {
-        'limit': 20,
-        'disable': 'true',
-        'offset': 0
-    },
+    'page[limit]': 10,
+    'page[offset]': 0,
     #'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
-    #'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
     #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and clientName eq 'TSTCLUSQLEKR02' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
-    'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
     #'filter': "scheduleType eq 'FULL' and policyType eq 'VMware' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
-
 }
 
-print("GET catalog images ...", end=" ")
-response = requests.get(nbu_api_baseurl +
-                        "/catalog/images",
-                        params=params,
-                        verify=False,
-                        headers=header_v3)
-parsed1 = response.json()
-print("done:", response.status_code)
+currpage=0
+while True:
+    print("GET catalog images (page:",currpage,") ...", end=" ")
+    response = requests.get(nbu_api_baseurl +
+                            "/catalog/images",
+                            params=params,
+                            verify=False,
+                            headers=header_v3)
+    parsed1 = response.json()
+    print("done:", response.status_code)
 
-if response.status_code != 200:
-    print("Error:", response)
-    quit(1)
-# print(json.dumps(parsed1, indent=4, sort_keys=True))
-# print(type(response), type(parsed1))
-print_dict_path('',parsed1)
+    if response.status_code != 200:
+        print("Error:", response)
+        quit(1)
+    # print(json.dumps(parsed1, indent=4, sort_keys=True))
+    # print(type(response), type(parsed1))
+    print_dict_path('',parsed1)
 
-# print catalog data on screen
-for idx, item in enumerate(parsed1['data']):
-    print("Index\t:", idx)
-    print("Type\t:",item['type'])
-    print("ID\t:",item['id'])
-    print("policyName\t:",item['attributes']['policyName'])
-    print("policyType\t:",item['attributes']['policyType'])
-    print("clientName\t:",item['attributes']['clientName'])
-    print("scheduleType\t:",item['attributes']['scheduleType'])
-    print("backupTime\t:",item['attributes']['backupTime'])
-    print("numFiles\t:",item['attributes']['numFiles'])
-    print("kbytes\t\t:",item['attributes']['kbytes'])
-    print("numberFragments\t:",item['attributes']['numberFragments'])
-    print("contentFile\t:",item['attributes']['contentFile'])
-    print("self href\t:", item['links']['self']['href'] )
-    print()
+    # print catalog data on screen
+    for idx, item in enumerate(parsed1['data']):
+        print("Index\t:", idx)
+        print("Type\t:",item['type'])
+        print("ID\t:",item['id'])
+        print("policyName\t:",item['attributes']['policyName'])
+        print("policyType\t:",item['attributes']['policyType'])
+        print("clientName\t:",item['attributes']['clientName'])
+        print("scheduleType\t:",item['attributes']['scheduleType'])
+        print("backupTime\t:",item['attributes']['backupTime'])
+        print("numFiles\t:",item['attributes']['numFiles'])
+        print("kbytes\t\t:",item['attributes']['kbytes'])
+        print("numberFragments\t:",item['attributes']['numberFragments'])
+        print("contentFile\t:",item['attributes']['contentFile'])
+        print("self href\t:", item['links']['self']['href'] )
+        print()
 
-i = int(input("Please enter index of the backup: "))
+    mystr = input("Please enter index of the backup (n for next, p for prev, l for last, f for first q for quit): ")
+    if mystr == 'q':
+        exit(-1)
+    if mystr == 'n':
+        try:
+            params['page[offset]'] = parsed1['meta']['pagination']['next']
+            continue
+        except KeyError:
+            print("Error redoing query")
+            continue
+    if mystr == 'p':
+        try:
+            params['page[offset]'] = parsed1['meta']['pagination']['prev']
+            continue
+        except KeyError:
+            print("Error redoing query")
+            continue
+    if mystr == 'f':
+        try:
+            params['page[offset]'] = parsed1['meta']['pagination']['first']
+            continue
+        except KeyError:
+            print("Error redoing query")
+            continue
+    if mystr == 'l':
+        try:
+            params['page[offset]'] = parsed1['meta']['pagination']['last']
+            continue
+        except KeyError:
+            print("Error redoing query")
+            continue
 
+    i=int(mystr)
+    break
+
+print(i)
 backupid=parsed1['data'][i]['id']
 
 params = {
@@ -109,6 +141,7 @@ params = {
         'offset': 0
     }
     }
+
 
 print("\nGET generating request id for details ...", end=" ")
 response = requests.get(nbu_api_baseurl +
