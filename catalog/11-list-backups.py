@@ -52,11 +52,8 @@ t_30_days_ago = t_now - timedelta(days=30)
 # print(t_now.strftime('%Y-%m-%dT%H:%M:%SZ'), t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
+    'page[limit]': 10,
+    'page[offset]': 0,
     #'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
     #'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
     #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and clientName eq 'TSTCLUSQLEKR02' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
@@ -105,12 +102,10 @@ backupidselflurl=parsed1['data'][i]['links']['self']['href']
 backupiddetailurl=parsed1['data'][i]['links']['self']['href']+'/contents'
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
+        'page[limit]': 10,
+        'page[offset]': 0
     }
+
 
 print("\nGET selfurl data  ...", end=" ")
 response = requests.get(nbu_api_baseurl +
@@ -129,12 +124,10 @@ if response.status_code != 200:
 print_dict_path('',parsed2)
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
+        'page[limit]': 10,
+        'page[offset]': 0
     }
+
 
 
 print("\nGET generating request id for details ...", end=" ")
@@ -156,12 +149,10 @@ print_dict_path('',parsed3)
 requestId=parsed3['requestId']
 
 params = {
-    'page': {
-        'limit': 10,
-        'disable': 'true',
-        'offset': 0
-    },
-}
+        'page[limit]': 10,
+        'page[offset]': 0
+    }
+
 
 urlwithrequestid='/catalog/images/contents/'+requestId
 time.sleep(1)
