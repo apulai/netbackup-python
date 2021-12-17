@@ -61,27 +61,28 @@ params = {
     #'filter': "scheduleType eq 'FULL' and policyType eq 'VMware' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
 }
 
-currpage=0
 while True:
-    print("GET catalog images (page:",currpage,") ...", end=" ")
+    print("GET catalog images (page:",params['page[offset]'],") ...", end=" ")
     response = requests.get(nbu_api_baseurl +
                             "/catalog/images",
                             params=params,
                             verify=False,
                             headers=header_v3)
-    parsed1 = response.json()
-    print("done:", response.status_code)
 
+    print("done:", response.status_code)
     if response.status_code != 200:
         print("Error:", response)
         quit(1)
+    parsed1 = response.json()
     # print(json.dumps(parsed1, indent=4, sort_keys=True))
     # print(type(response), type(parsed1))
-    print_dict_path('',parsed1)
+    #print_dict_path('',parsed1)
+
+    offset = parsed1['meta']['pagination']['offset']
 
     # print catalog data on screen
     for idx, item in enumerate(parsed1['data']):
-        print("Index\t:", idx)
+        print("Index\t:", idx+offset)
         print("Type\t:",item['type'])
         print("ID\t:",item['id'])
         print("policyName\t:",item['attributes']['policyName'])
@@ -93,6 +94,7 @@ while True:
         print("kbytes\t\t:",item['attributes']['kbytes'])
         print("numberFragments\t:",item['attributes']['numberFragments'])
         print("contentFile\t:",item['attributes']['contentFile'])
+        print("keyword\t\t:",item['attributes']['keyword'])
         print("self href\t:", item['links']['self']['href'] )
         print()
 
@@ -128,29 +130,48 @@ while True:
             print("Error redoing query")
             continue
 
-    i=int(mystr)
+    i=int(mystr)-offset
     break
 
 print(i)
-backupid=parsed1['data'][i]['id']
+backupId=parsed1['data'][i]['id']
+policyName=parsed1['data'][i]['attributes']['policyName']
 
+
+print("\nGET getting policy details ",policyName,"  ...", end=" ")
 params = {
         'page[limit]': 10,
         'page[offset]': 0
     }
-
-
-print("\nGET generating request id for details ...", end=" ")
 response = requests.get(nbu_api_baseurl +
-                        '/catalog/images/'+backupid+'/contents',
+                        '/config/policies/'+policyName,
                         params=params,
                         verify=False,
                         headers=header_v3)
 print("done:", response.status_code)
-parsed2 = response.json()
+if not (response.status_code == 200 or response.status_code == 202):
+    print("Error:", response, " ... policy not found? No policy details!")
+else:
+    parsed11 = response.json()
+    # print(json.dumps(parsed2, indent=4, sort_keys=True))
+    # print(type(response), type(parsed2))
+    # print_dict_path('',parsed11)
+    for idx,item in enumerate(parsed11['data']['attributes']['policy']['backupSelections']['selections']):
+        print(idx,"/t:",item)
+
+
+
+print("\nGET generating request id for details ...", end=" ")
+response = requests.get(nbu_api_baseurl +
+                        '/catalog/images/'+backupId+'/contents',
+                        params=params,
+                        verify=False,
+                        headers=header_v3)
+print("done:", response.status_code)
 if not (response.status_code == 200 or response.status_code == 202):
     print("Error:", response)
     quit(1)
+parsed2 = response.json()
 # print(json.dumps(parsed2, indent=4, sort_keys=True))
 # print(type(response), type(parsed2))
 #print_dict_path('',parsed2)
@@ -176,11 +197,11 @@ while True:
                         params=params,
                         verify=False,
                         headers=header_v5)
-    parsed4 = response.json()
 
     if response.status_code != 200 and response.status_code != 202:
         break
 
+    parsed4 = response.json()
     # we have this key usually if policy is standard at least
     try:
         value = parsed4['data'][0]['attributes']['filePath']
@@ -195,8 +216,8 @@ while True:
         for idx,item in enumerate(parsed4['data']):
             print(counter, ":", item['attributes']['filePath']," : ",item['attributes']['fileSize'])
             counter=counter+1
-            print("Most rawban ugyanaz:")
-            print_dict_path('',parsed4)
+            #print("Most rawban ugyanaz:")
+            #print_dict_path('',parsed4)
     else:
         # print(json.dumps(parsed2, indent=4, sort_keys=True))
         # print(type(response), type(parsed2))
