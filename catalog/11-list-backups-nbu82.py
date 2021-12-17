@@ -82,7 +82,7 @@ while True:
 
     # print catalog data on screen
     for idx, item in enumerate(parsed1['data']):
-        print("Index\t:", idx+offset)
+        print("Index\t:", idx)
         print("Type\t:",item['type'])
         print("ID\t:",item['id'])
         print("policyName\t:",item['attributes']['policyName'])
@@ -139,10 +139,12 @@ policyName=parsed1['data'][i]['attributes']['policyName']
 
 
 print("\nGET getting policy details ",policyName,"  ...", end=" ")
+
 params = {
         'page[limit]': 10,
         'page[offset]': 0
     }
+
 response = requests.get(nbu_api_baseurl +
                         '/config/policies/'+policyName,
                         params=params,
@@ -158,7 +160,6 @@ else:
     # print_dict_path('',parsed11)
     for idx,item in enumerate(parsed11['data']['attributes']['policy']['backupSelections']['selections']):
         print(idx,"/t:",item)
-
 
 
 print("\nGET generating request id for details ...", end=" ")
@@ -197,10 +198,8 @@ while True:
                         params=params,
                         verify=False,
                         headers=header_v5)
-
     if response.status_code != 200 and response.status_code != 202:
         break
-
     parsed4 = response.json()
     # we have this key usually if policy is standard at least
     try:
