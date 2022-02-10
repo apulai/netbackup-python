@@ -1,0 +1,110 @@
+2022-02-10T04:39:57Z 2022-01-11T04:39:57Z
+GET catalog images (page: 0 ) ... done: 200
+['data'][0]['type'] => recovery-point
+['data'][0]['id'] => ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94
+['data'][0]['attributes']['assetType'] => sqlDatabase
+['data'][0]['attributes']['assetId'] => 7f40c0bdea510b9255b8b58bfdaa42bb2808b4a6b52665f1c325be694098f328
+['data'][0]['attributes']['clientName'] => MSCLUSTER.lab.local
+['data'][0]['attributes']['backupTime'] => 2022-02-10T07:57:41.000Z
+['data'][0]['attributes']['extendedAttributes']['sqlInstance'] => MSSQLSERVER
+['data'][0]['attributes']['extendedAttributes']['agName'] => DemoAG
+['data'][0]['attributes']['extendedAttributes']['databaseName'] => AdventureWorks2016
+['data'][0]['attributes']['extendedAttributes']['backupReplica'] => sql1.lab.local\be7cf3a636133b8bfcbfa4fc28a9abf8036184dc9cc56340c882cae85c16a9ac
+['data'][0]['attributes']['extendedAttributes']['sqlVersion'] => 12
+['data'][0]['attributes']['extendedAttributes']['backupName'] => /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+['data'][0]['attributes']['extendedAttributes']['backupMethod'] => SNAPSHOT
+['data'][0]['attributes']['extendedAttributes']['backupType'] => DATABASE
+['data'][0]['attributes']['extendedAttributes']['policyName'] => BACKUPNOW+bdaa2f04-a30c-4d25-b17e-5f02d3230ae2
+['data'][0]['attributes']['extendedAttributes']['keywordPhrase'] => /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+['data'][0]['attributes']['extendedAttributes']['backupIds'][0] => UNKNOWN
+['data'][0]['attributes']['extendedAttributes']['copyOnly'] => False
+['data'][0]['attributes']['extendedAttributes']['firstLogSequenceNumber'] => 41000000084200001
+['data'][0]['attributes']['extendedAttributes']['lastLogSequenceNumber'] => 42000000003400001
+['data'][0]['attributes']['extendedAttributes']['compressed'] => False
+['data'][0]['attributes']['extendedAttributes']['encrypted'] => False
+['data'][0]['attributes']['extendedAttributes']['blockSize'] => 7
+['data'][0]['attributes']['extendedAttributes']['stripes'] => 1
+['data'][0]['attributes']['extendedAttributes']['accessControlId'] => |ASSETS|MSSQL|INSTANCE|be7cf3a636133b8bfcbfa4fc28a9abf8036184dc9cc56340c882cae85c16a9ac|DATABASE|7f40c0bdea510b9255b8b58bfdaa42bb2808b4a6b52665f1c325be694098f328|
+['data'][0]['attributes']['extendedAttributes']['agDbId'] => cffa93b4ca1b17c43df393237c046c34dd451b603fb35f40357f8b3791088c54
+['data'][0]['attributes']['extendedAttributes']['timeZone'] => 
+['data'][0]['relationships']['optionalMssqlRecoveryPointInfo']['data'][0]['type'] => optionalMssqlRecoveryPointInfo
+['data'][0]['relationships']['optionalMssqlRecoveryPointInfo']['data'][0]['id'] => ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94__optionalMssqlRecoveryPointInfo
+['data'][0]['links']['self']['href'] => recovery-point-service/workloads/mssql/recovery-points/ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94
+['meta']['pagination']['pages'] => 1
+['meta']['pagination']['offset'] => 0
+['meta']['pagination']['last'] => 0
+['meta']['pagination']['limit'] => 10
+['meta']['pagination']['count'] => 1
+['meta']['pagination']['page'] => 0
+['meta']['pagination']['first'] => 0
+['links']['last']['href'] => https://nbumaster.lab.local:1556/netbackup/recovery-point-service/workloads/mssql/recovery-points?page%5Boffset%5D=0&page%5Blimit%5D=10&filter=(backupTime%20ge%202022-01-11T04:39:57Z)
+['links']['self']['href'] => https://nbumaster.lab.local:1556/netbackup/recovery-point-service/workloads/mssql/recovery-points?page%5Boffset%5D=0&page%5Blimit%5D=10&filter=(backupTime%20ge%202022-01-11T04:39:57Z)
+['links']['first']['href'] => https://nbumaster.lab.local:1556/netbackup/recovery-point-service/workloads/mssql/recovery-points?page%5Boffset%5D=0&page%5Blimit%5D=10&filter=(backupTime%20ge%202022-01-11T04:39:57Z)
+Index	: 0
+type	: recovery-point
+id	: ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94
+assetType	: sqlDatabase
+clientName	: MSCLUSTER.lab.local
+sqlInstance	: MSSQLSERVER
+agName	: DemoAG
+databaseName	: AdventureWorks2016
+backupReplica	: sql1.lab.local\be7cf3a636133b8bfcbfa4fc28a9abf8036184dc9cc56340c882cae85c16a9ac
+sqlVersion	: 12
+backupName	: /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+backupMethod	: SNAPSHOT
+backupType	: DATABASE
+policyName	: BACKUPNOW+bdaa2f04-a30c-4d25-b17e-5f02d3230ae2
+keywordPhrase	: /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+firstLogSequenceNumber	: 41000000084200001
+lastLogSequenceNumber	: 42000000003400001
+
+Please enter index of the backup (n for next, p for prev, l for last, f for first q for quit): 0
+------------------------
+Getting recovery point details:
+------------------------
+[0]['type'] => optionalMssqlRecoveryPointInfo
+[0]['id'] => ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94__optionalMssqlRecoveryPointInfo
+[0]['attributes']['fullyRecoverable'] => True
+[0]['attributes']['instantAccessAvailable'] => True
+[0]['attributes']['uniqueSourceFiles'][0]['fileName'] => AdventureWorks2016_Data
+[0]['attributes']['uniqueSourceFiles'][0]['fileGroup'] => PRIMARY
+[0]['attributes']['uniqueSourceFiles'][0]['filePath'] => C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\AdventureWorks2016_Data.mdf
+[0]['attributes']['uniqueSourceFiles'][0]['fileType'] => DATAFILE
+[0]['attributes']['uniqueSourceFiles'][1]['fileName'] => AdventureWorks2016_Log
+[0]['attributes']['uniqueSourceFiles'][1]['fileGroup'] => 
+[0]['attributes']['uniqueSourceFiles'][1]['filePath'] => C:\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\AdventureWorks2016_Log.ldf
+[0]['attributes']['uniqueSourceFiles'][1]['fileType'] => LOGFILE
+[0]['attributes']['backupImageCopyInfo'][0]['backupId'] => MSCLUSTER.lab.local_1644479867
+[0]['attributes']['backupImageCopyInfo'][0]['numCopies'] => 1
+[0]['attributes']['backupImageCopyInfo'][0]['primaryCopy'] => 1
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['copyNumber'] => 1
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['storage']['storageDestinationIdentifier'] => MSDP_DISK
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['storage']['storageServerType'] => MSDP
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['storage']['sType'] => PureDisk
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['storage']['storageServer'] => nbumediabyo.lab.local
+[0]['attributes']['backupImageCopyInfo'][0]['copies'][0]['restoreCapabilities'][0] => INSTANT_ACCESS
+[0]['attributes']['fullRecoveryList']['fullBackup']['id'] => ea11cc6073d928289fc06addfd5382492ff22952c305c4b603e417ecde55ce94
+[0]['attributes']['fullRecoveryList']['fullBackup']['clientName'] => MSCLUSTER.lab.local
+[0]['attributes']['fullRecoveryList']['fullBackup']['backupTime'] => 2022-02-10T07:57:41.000Z
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['sqlInstance'] => MSSQLSERVER
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['agName'] => DemoAG
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['databaseName'] => AdventureWorks2016
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['backupReplica'] => sql1.lab.local\be7cf3a636133b8bfcbfa4fc28a9abf8036184dc9cc56340c882cae85c16a9ac
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['sqlVersion'] => 12
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['backupName'] => /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['backupMethod'] => SNAPSHOT
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['backupType'] => DATABASE
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['policyName'] => BACKUPNOW+bdaa2f04-a30c-4d25-b17e-5f02d3230ae2
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['keywordPhrase'] => /MSCLUSTER.lab.local:SQL1/MSSQL7/DEMOAG/db/AdventureWorks2016/~/7/001of001/20220210075730//C
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['backupIds'][0] => MSCLUSTER.lab.local_1644479867
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['copyOnly'] => False
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['firstLogSequenceNumber'] => 41000000084200001
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['lastLogSequenceNumber'] => 42000000003400001
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['compressed'] => False
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['encrypted'] => False
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['blockSize'] => 7
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['stripes'] => 1
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['accessControlId'] => |ASSETS|MSSQL|INSTANCE|be7cf3a636133b8bfcbfa4fc28a9abf8036184dc9cc56340c882cae85c16a9ac|DATABASE|7f40c0bdea510b9255b8b58bfdaa42bb2808b4a6b52665f1c325be694098f328|
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['agDbId'] => cffa93b4ca1b17c43df393237c046c34dd451b603fb35f40357f8b3791088c54
+[0]['attributes']['fullRecoveryList']['fullBackup']['extendedAttributes']['timeZone'] => 
+process finished
