@@ -56,6 +56,7 @@ params = {
     'page[offset]': 0,
     #filter: %28severity+eq+%27CRITICAL%27%29+or+%28severity+eq+%27NOTICE%27%29
     #'filter': "(severity eq 'CRITICAL') or (severity eq 'NOTICE')"
+    'filter': "id gt 831"
     #'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
     #'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
     #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and clientName eq 'TSTCLUSQLEKR02' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
@@ -78,7 +79,7 @@ while True:
     parsed1 = response.json()
     # print(json.dumps(parsed1, indent=4, sort_keys=True))
     # print(type(response), type(parsed1))
-    # print_dict_path('',parsed1)
+    print_dict_path('',parsed1)
 
     offset = parsed1['meta']['pagination']['offset']
 
