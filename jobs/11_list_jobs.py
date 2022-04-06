@@ -91,25 +91,32 @@ while True:
         print("jobId\t\t\t:",item['attributes']['jobId'])
         print("jobType\t\t\t:",item['attributes']['jobType'])
         #print_attrib("status\t:",item['attributes']['status'])
+        print("state\t\t\t:",item['attributes']['state'])
         try:
             print("status\t\t\t:",item['attributes']['status'])
         except KeyError:
             print("status\t\t\t:"," no such key ")
-        print("state\t\t\t:",item['attributes']['state'])
-        print("policyName\t\t:",item['attributes']['policyName'])
-        #print_attrib("policyType\t:",item['attributes']['policyType'])
+        try:
+            print("policyName\t\t:",item['attributes']['policyName'])        #print_attrib("policyType\t:",item['attributes']['policyType'])
+        except KeyError:
+            print("policyName\t\t: -")
         try:
             print("policyType\t\t:",item['attributes']['policyType'])
         except KeyError:
             print("policyType\t\t:"," no such key ")
-        print("clientName\t\t:",item['attributes']['clientName'])
-        #print("scheduleType\t:",item['attributes']['scheduleType'])
+        try:
+            print("clientName\t\t:",item['attributes']['clientName'])#print("scheduleType\t:",item['attributes']['scheduleType'])
+        except KeyError:
+            print("clientName\t\t: -")
         try:
             print("scheduleType\t\t:",item['attributes']['scheduleType'])
         except KeyError:
             print("scheduleType\t\t:"," no such key ")
         print("startTime\t\t:",item['attributes']['startTime'])
-        print("endTime\t\t\t:",item['attributes']['endTime'])
+        try:
+            print("endTime\t\t\t:",item['attributes']['endTime'])
+        except KeyError:
+            print("endTime\t\t\t: - ")
         print("kilobytesTransferred\t:",item['attributes']['kilobytesTransferred'])
         print("kilobytesToTransfer\t:",item['attributes']['kilobytesToTransfer'])
         print("elapsedTime\t\t:",item['attributes']['elapsedTime'])
@@ -176,7 +183,7 @@ else:
     # print(type(response), type(parsed2))
     # print_dict_path('',parsed11)
     for idx,item in enumerate(parsed11['data']['attributes']['policy']['backupSelections']['selections']):
-        print(idx,"/t:",item)
+        print(idx,"\t:",item)
 
 
 print("\nGET generating request id for details ...", end=" ")

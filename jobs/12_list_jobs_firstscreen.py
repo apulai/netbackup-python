@@ -11,21 +11,11 @@ nbu_api_hostname = "nbumaster.lab.local"
 nbu_api_baseurl = "https://" + nbu_api_hostname + ":1556/netbackup"
 
 nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
-nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
-nbu_api_content_type_v3 = "application/vnd.netbackup+json;version=3.0"
+
 
 header_v6 = {'Accept': nbu_api_content_type_v6,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v6}
-
-header_v5 = {'Accept': nbu_api_content_type_v5,
-             'Authorization': nbu_api_key,
-             'Content-Type': nbu_api_content_type_v5}
-
-header_v3 = {'Accept': nbu_api_content_type_v3,
-             'Authorization': nbu_api_key,
-             'Content-Type': nbu_api_content_type_v3}
-
 
 # This helper function will print the parsed json (dictionary)
 # in an easy to use format.
@@ -45,6 +35,11 @@ def print_dict_path(path, obj):
     else:
         print(path + " =>", obj)
 
+def print_attrib(name, item):
+    try:
+        print(name,item)
+    except KeyError:
+        print(name," no such key ")
 
 # Preparing to get catalog data
 t_now = datetime.now()
@@ -54,80 +49,69 @@ print(t_now.strftime('%Y-%m-%dT%H:%M:%SZ'), t_30_days_ago.strftime('%Y-%m-%dT%H:
 params = {
     'page[limit]': 10,
     'page[offset]': 0,
-    #'filter': "(severity eq 'CRITICAL') or (severity eq 'NOTICE')"
-    #'filter': "id gt 831"
-    #'filter': "createdDateTime gt 2022-02-14T00:00:00.000Z"
-    # not good 'filter': "createdDateTime gt 2022-02-14 01:33:00"
-    }
+    #'filter': "assetId eq '"+asset_id+"' and (backupTime ge 2021-11-01T00:00:00.000Z)"
+    #'filter': "scheduleType eq 'FULL' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and clientName eq 'TSTCLUSQLEKR02' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'MS-SQL-Server' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+    #'filter': "scheduleType eq 'FULL' and policyType eq 'VMware' and (backupTime ge " + t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ') + ")"
+}
 
-while True:
-    print("GET eventlog entries (page:",params['page[offset]'],") ...", end=" ")
-    response = requests.get(nbu_api_baseurl +
-                            "/eventlog/notifications",
-                            params=params,
-                            verify=False,
-                            headers=header_v6)
+print("GET jobs entries (page:",params['page[offset]'],") ...", end=" ")
+response = requests.get(nbu_api_baseurl +
+                        "/admin/jobs",
+                        params=params,
+                        verify=False,
+                        headers=header_v6)
 
-    print("done:", response.status_code)
-    if response.status_code != 200:
-        print("Error:", response)
-        quit(1)
+print("done:", response.status_code)
+if response.status_code != 200:
+    print("Error:", response)
+    quit(1)
 
-    parsed1=response.json()
-    # print(json.dumps(parsed1, indent=4, sort_keys=True))
-    # print(type(response), type(parsed1))
-    print_dict_path('',parsed1)
+parsed1 = response.json()
+# print(json.dumps(parsed1, indent=4, sort_keys=True))
+# print(type(response), type(parsed1))
+# print_dict_path('',parsed1)
 
-    offset = parsed1['meta']['pagination']['offset']
+# print jobs data on screen
+for idx, item in enumerate(parsed1['data']):
+    print("Index\t\t\t:", idx)
+    print("jobId\t\t\t:",item['attributes']['jobId'])
+    print("jobType\t\t\t:",item['attributes']['jobType'])
+    #print_attrib("status\t:",item['attributes']['status'])
+    try:
+        print("status\t\t\t:",item['attributes']['status'])
+    except KeyError:
+        print("status\t\t\t:"," no such key ")
+    print("state\t\t\t:",item['attributes']['state'])
+    try:
+        print("policyName\t\t:",item['attributes']['policyName'])        #print_attrib("policyType\t:",item['attributes']['policyType'])
+    except KeyError:
+        print("policyName\t\t: -")
+    try:
+        print("policyType\t\t:",item['attributes']['policyType'])
+    except KeyError:
+        print("policyType\t\t:"," no such key ")
+    try:
+        print("clientName\t\t:",item['attributes']['clientName'])#print("scheduleType\t:",item['attributes']['scheduleType'])
+    except KeyError:
+        print("clientName\t\t: -")
+    try:
+        print("scheduleType\t\t:",item['attributes']['scheduleType'])
+    except KeyError:
+        print("scheduleType\t\t:"," no such key ")
+    print("startTime\t\t:",item['attributes']['startTime'])
+    try:
+        print("endTime\t\t\t:",item['attributes']['endTime'])
+    except KeyError:
+        print("endTime\t\t\t: - ")
+    print("kilobytesTransferred\t:",item['attributes']['kilobytesTransferred'])
+    print("kilobytesToTransfer\t:",item['attributes']['kilobytesToTransfer'])
+    print("elapsedTime\t\t:",item['attributes']['elapsedTime'])
+    print()
 
-    # print catalog data on screen
-    for idx, item in enumerate(parsed1['data']):
-        print("Index\t\t:", idx)
-        print("Type\t\t:",item['type'])
-        print("ID\t\t:",item['id'])
-        print("priority\t:",item['attributes']['priority'])
-        print("severity\t:",item['attributes']['severity'])
-        print("createdDateTime\t:",item['attributes']['createdDateTime'])
-        print("displayString\t:",item['attributes']['displayString'])
-        print("producerName\t:",item['attributes']['producerName'])
-        print("producerSubType\t:",item['attributes']['producerSubType'])
-        print()
-
-    mystr = input("Please enter index of the backup (n for next, p for prev, l for last, f for first q for quit): ")
-    if mystr == 'q':
-        exit(-1)
-    if mystr == 'n':
-        try:
-            params['page[offset]'] = parsed1['meta']['pagination']['next']
-            continue
-        except KeyError:
-            print("Error redoing query")
-            continue
-    if mystr == 'p':
-        try:
-            params['page[offset]'] = parsed1['meta']['pagination']['prev']
-            continue
-        except KeyError:
-            print("Error redoing query")
-            continue
-    if mystr == 'f':
-        try:
-            params['page[offset]'] = parsed1['meta']['pagination']['first']
-            continue
-        except KeyError:
-            print("Error redoing query")
-            continue
-    if mystr == 'l':
-        try:
-            params['page[offset]'] = parsed1['meta']['pagination']['last']
-            continue
-        except KeyError:
-            print("Error redoing query")
-            continue
-
-    i=int(mystr)-offset
-    break
-
+mystr = input("Please enter index of the backup (n for next, p for prev, l for last, f for first q for quit): ")
+i=int(mystr)
 print(i)
 backupId=parsed1['data'][i]['id']
 policyName=parsed1['data'][i]['attributes']['policyName']
@@ -144,7 +128,7 @@ response = requests.get(nbu_api_baseurl +
                         '/config/policies/'+policyName,
                         params=params,
                         verify=False,
-                        headers=header_v3)
+                        headers=header_v6)
 print("done:", response.status_code)
 if not (response.status_code == 200 or response.status_code == 202):
     print("Error:", response, " ... policy not found? No policy details!")
@@ -154,7 +138,7 @@ else:
     # print(type(response), type(parsed2))
     # print_dict_path('',parsed11)
     for idx,item in enumerate(parsed11['data']['attributes']['policy']['backupSelections']['selections']):
-        print(idx,"/t:",item)
+        print(idx,"\t:",item)
 
 
 print("\nGET generating request id for details ...", end=" ")
@@ -162,7 +146,7 @@ response = requests.get(nbu_api_baseurl +
                         '/catalog/images/'+backupId+'/contents',
                         params=params,
                         verify=False,
-                        headers=header_v3)
+                        headers=header_v6)
 print("done:", response.status_code)
 if not (response.status_code == 200 or response.status_code == 202):
     print("Error:", response)
