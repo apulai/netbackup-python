@@ -197,7 +197,7 @@ while True:
                         urlwithrequestid,
                         params=params,
                         verify=False,
-                        headers=header_v5)
+                        headers=header_v3)
     if response.status_code != 200 and response.status_code != 202:
         break
     parsed4 = response.json()

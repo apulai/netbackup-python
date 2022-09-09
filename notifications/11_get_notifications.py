@@ -93,7 +93,7 @@ while True:
         print("producerSubType\t:",item['attributes']['producerSubType'])
         print()
 
-    mystr = input("Please enter index of the backup (n for next, p for prev, l for last, f for first q for quit): ")
+    mystr = input("(n for next, p for prev, l for last, f for first q for quit): ")
     if mystr == 'q':
         exit(-1)
     if mystr == 'n':
@@ -124,99 +124,5 @@ while True:
         except KeyError:
             print("Error redoing query")
             continue
-
-    i=int(mystr)-offset
-    break
-
-print(i)
-backupId=parsed1['data'][i]['id']
-policyName=parsed1['data'][i]['attributes']['policyName']
-
-
-print("\nGET getting policy details ",policyName,"  ...", end=" ")
-
-params = {
-        'page[limit]': 10,
-        'page[offset]': 0
-    }
-
-response = requests.get(nbu_api_baseurl +
-                        '/config/policies/'+policyName,
-                        params=params,
-                        verify=False,
-                        headers=header_v3)
-print("done:", response.status_code)
-if not (response.status_code == 200 or response.status_code == 202):
-    print("Error:", response, " ... policy not found? No policy details!")
-else:
-    parsed11 = response.json()
-    # print(json.dumps(parsed2, indent=4, sort_keys=True))
-    # print(type(response), type(parsed2))
-    # print_dict_path('',parsed11)
-    for idx,item in enumerate(parsed11['data']['attributes']['policy']['backupSelections']['selections']):
-        print(idx,"/t:",item)
-
-
-print("\nGET generating request id for details ...", end=" ")
-response = requests.get(nbu_api_baseurl +
-                        '/catalog/images/'+backupId+'/contents',
-                        params=params,
-                        verify=False,
-                        headers=header_v3)
-print("done:", response.status_code)
-if not (response.status_code == 200 or response.status_code == 202):
-    print("Error:", response)
-    quit(1)
-parsed2 = response.json()
-# print(json.dumps(parsed2, indent=4, sort_keys=True))
-# print(type(response), type(parsed2))
-#print_dict_path('',parsed2)
-requestId=parsed2['requestId']
-
-params = {
-        'page[limit]': 10,
-        'page[offset]': 0
-    }
-
-
-print("------------------------")
-print("Printing set details:")
-print("------------------------")
-
-
-urlwithrequestid='/catalog/images/contents/'+requestId
-
-counter=1
-while True:
-    response = requests.get(nbu_api_baseurl +
-                        urlwithrequestid,
-                        params=params,
-                        verify=False,
-                        headers=header_v5)
-    if response.status_code != 200 and response.status_code != 202:
-        break
-    parsed4 = response.json()
-    # we have this key usually if policy is standard at least
-    try:
-        value = parsed4['data'][0]['attributes']['filePath']
-        printdetails = 1
-    except KeyError:
-        printdetails = 0
-    except IndexError:
-        printdetails = 0
-
-
-    if printdetails == 1:
-        for idx,item in enumerate(parsed4['data']):
-            print(counter, ":", item['attributes']['filePath']," : ",item['attributes']['fileSize'])
-            counter=counter+1
-            #print("Most rawban ugyanaz:")
-            #print_dict_path('',parsed4)
-    else:
-        # print(json.dumps(parsed2, indent=4, sort_keys=True))
-        # print(type(response), type(parsed2))
-        print_dict_path('',parsed4)
-
-    time.sleep(1)
 
 print("process finished")
