@@ -63,7 +63,7 @@ params = {
 while True:
     print("GET eventlog entries (page:",params['page[offset]'],") ...", end=" ")
     response = requests.get(nbu_api_baseurl +
-                            "/security/logindetails",
+                            "/security/auditlogs",
                             params=params,
                             verify=False,
                             headers=header_v6)
@@ -92,9 +92,9 @@ while True:
         print("reason\t:",item['attributes']['reason'])
         print("auditDateTime\t:", item['attributes']['auditDateTime'])
 
-        print("auditUserIdentity'][0]['userName\t:", item['attributes']['auditUserIdentity'][0]['userName'])
-        print("auditUserIdentity'][0]['domainName\t:", item['attributes']['auditUserIdentity'][0]['domainName'])
-        print("auditUserIdentity'][0]['domainType\t:", item['attributes']['auditUserIdentity'][0]['domainType'])
+        print("auditUserIdentity']['userName\t:", item['attributes']['auditUserIdentity']['userName'])
+        print("auditUserIdentity']['domainName\t:", item['attributes']['auditUserIdentity']['domainName'])
+        print("auditUserIdentity']['domainType\t:", item['attributes']['auditUserIdentity']['domainType'])
 
         print()
 
