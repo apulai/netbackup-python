@@ -63,7 +63,7 @@ params = {
 while True:
     print("GET eventlog entries (page:",params['page[offset]'],") ...", end=" ")
     response = requests.get(nbu_api_baseurl +
-                            "/eventlog/notifications",
+                            "/eventlog/messages",
                             params=params,
                             verify=False,
                             headers=header_v6)
@@ -85,12 +85,9 @@ while True:
         print("Index\t\t:", idx)
         print("Type\t\t:",item['type'])
         print("ID\t\t:",item['id'])
-        print("priority\t:",item['attributes']['priority'])
-        print("severity\t:",item['attributes']['severity'])
+        print("messageKey\t:",item['attributes']['messageKey'])
         print("createdDateTime\t:",item['attributes']['createdDateTime'])
-        print("displayString\t:",item['attributes']['displayString'])
-        print("producerName\t:",item['attributes']['producerName'])
-        print("producerSubType\t:",item['attributes']['producerSubType'])
+        print("lastUpdatedDateTime\t:",item['attributes']['lastUpdatedDateTime'])
         print()
 
     mystr = input("(n for next, p for prev, l for last, f for first q for quit): ")
