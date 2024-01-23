@@ -6,9 +6,14 @@ import time
 # This call will disable invalid https certificate   disable_warnings
 requests.urllib3.disable_warnings()
 
-nbu_api_key = "A82V50vDyuSMjBzPULKXZH2x5kIxbIxg1IpL1q78R7jhoCm5wKWR5joAX-MgwM1k"
+#nbu_api_key = "A82V50vDyuSMjBzPULKXZH2x5kIxbIxg1IpL1q78R7jhoCm5wKWR5joAX-MgwM1k"
 nbu_api_hostname = "nbuprimary.lab.local"
 nbu_api_baseurl = "https://" + nbu_api_hostname + ":1556/netbackup"
+
+file1 = open('apikey.txt', 'r')
+nbu_api_key = file1.readline()
+print(nbu_api_key)
+
 
 nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
@@ -51,6 +56,7 @@ t_now = datetime.now()
 t_30_days_ago = t_now - timedelta(days=30)
 print(t_now.strftime('%Y-%m-%dT%H:%M:%SZ'), t_30_days_ago.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
+
 params = {
     'page[limit]': 10,
     'page[offset]': 0,
@@ -78,7 +84,6 @@ while True:
     # print(type(response), type(parsed1))
     print_dict_path('',parsed1)
 
-    quit();
     offset = parsed1['meta']['pagination']['offset']
 
     # print catalog data on screen
@@ -86,8 +91,8 @@ while True:
         print("Index\t\t:", idx)
         print("Type\t\t:",item['type'])
         print("ID\t\t:",item['id'])
-        print("messageKey\t:",item['attributes']['messageKey'])
-        print("createdDateTime\t:",item['attributes']['createdDateTime'])
+        print("lastupdated\t:",item['attributes']['lastUpdateTimeUTC'])
+        print("certHash\t:",item['attributes']['certHash'])
         print("lastUpdatedDateTime\t:",item['attributes']['lastUpdatedDateTime'])
         print()
 
@@ -122,5 +127,25 @@ while True:
         except KeyError:
             print("Error redoing query")
             continue
+
+    idx=int(mystr)
+    msdpname=parsed1['data'][idx]['id']
+
+    print("GET msdp server details (page:", params['page[offset]'], ") ...", end=" ")
+    response = requests.get(nbu_api_baseurl +
+                            f"/config/servers/msdp-servers/{msdpname}",
+                            params=params,
+                            verify=False,
+                            headers=header_v6)
+
+    print("done:", response.status_code)
+    if response.status_code != 200:
+        print("Error:", response)
+        quit(1)
+
+    parsed2 = response.json()
+    # print(json.dumps(parsed1, indent=4, sort_keys=True))
+    # print(type(response), type(parsed1))
+    print_dict_path('', parsed2)
 
 print("process finished")
