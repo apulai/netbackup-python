@@ -87,9 +87,8 @@ for idx, item in enumerate(parsed1['data']):
     print("Index\t\t:", idx)
     print("Type\t\t:", item['type'])
     print("ID\t\t:", item['id'])
-    print("lastupdated\t:", item['attributes']['lastUpdateTimeUTC'])
+    print("lastUpdateTimeUTC\t:", item['attributes']['lastUpdateTimeUTC'])
     print("certHash\t:", item['attributes']['certHash'])
-    print("lastUpdatedDateTime\t:", item['attributes']['lastUpdatedDateTime'])
     print()
 
 mystr = input("Enter index: ")
