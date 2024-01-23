@@ -3,10 +3,10 @@ import requests
 from datetime import datetime, timedelta
 import time
 
-# This call will disable invalid https certificate disable_warnings
+# This call will disable invalid https certificate   disable_warnings
 requests.urllib3.disable_warnings()
 
-nbu_api_key = "A8fmNjyB5DvvzAN1CnRWblMv160U1Vt5hs5P2fqj81pJh9224HRus-w9YuXnwSMa"
+nbu_api_key = "A82V50vDyuSMjBzPULKXZH2x5kIxbIxg1IpL1q78R7jhoCm5wKWR5joAX-MgwM1k"
 nbu_api_hostname = "nbuprimary.lab.local"
 nbu_api_baseurl = "https://" + nbu_api_hostname + ":1556/netbackup"
 
