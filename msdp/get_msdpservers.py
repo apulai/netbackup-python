@@ -84,12 +84,15 @@ print_dict_path('', parsed1)
 
 # print msdpserver data on screen
 for idx, item in enumerate(parsed1['data']):
-    print("Index\t\t:", idx)
-    print("Type\t\t:", item['type'])
-    print("ID\t\t:", item['id'])
-    print("lastUpdateTimeUTC\t:", item['attributes']['lastUpdateTimeUTC'])
-    print("certHash\t:", item['attributes']['certHash'])
+    print(json.dumps(item,indent=4))
+    #print("Index\t\t:", idx)
+    #print("Type\t\t:", item['type'])
+    #print("ID\t\t:", item['id'])
+    #print("lastUpdateTimeUTC\t:", item['attributes']['lastUpdateTimeUTC'])
+    #print("certHash\t:", item['attributes']['certHash'])
     print()
+
+quit()
 
 mystr = input("Enter index: ")
 
