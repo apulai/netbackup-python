@@ -1,0 +1,30 @@
+# $Copyright: Copyright (c) 2023 Veritas Technologies LLC. All rights reserved $
+# Prerequisites:
+# bash shell on a linux host that has access to ports 443
+# NetBackup primary server's hostname: $primary_hostname
+# NetBackup Deduplication storage server hostname: $sts_hostname
+# NetBackup JWT or API key auth token: $auth_token
+
+# change these values to your environment
+primary_hostname="change this"
+auth_token="replace this"
+sts_hostname="replace this"
+
+# constants do not change
+content_type="Content-Type:application/vnd.netbackup+json;version=6.0"
+begin_line="^-----BEGIN CERTIFICATE-----$"
+end_line="^-----END CERTIFICATE-----$"
+
+my_cert=$(openssl s_client -connect "${sts_hostname}:443" 2>/dev/null <<< "Q" | sed -n -e "/${begin_line}/,/${end_line}/ { /${begin_line}/d; /${end_line}/d; p; }" | tr -d '\n')
+echo "My Cert"
+echo ${my_cert}
+echo "---"
+my_json="{\"data\": {\"type\": \"saveMsdpWebServerCert\", \"id\": \"${sts_hostname}\", \"attributes\": {\"certString\": \"${my_cert}\" }}}"
+echo "My Cert"
+echo ${my_cert}
+echo "---"
+
+my_url="https://${primary_hostname}/netbackup/config/servers/msdp-servers"
+curl -k -XPOST -H "Authorization:${auth_token}" -H "${content_type}" ${my_url} -d "${my_json}"
+# NOTE if POST fails with HTTP status 409, comment out the above line and uncomment the line below
+#curl -k -XPUT -H "Authorization:${auth_token}" -H "${content_type}" ${my_url}/${sts_hostname} -d "${my_json}"
