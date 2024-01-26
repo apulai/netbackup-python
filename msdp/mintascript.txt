@@ -20,8 +20,8 @@ echo "My Cert"
 echo ${my_cert}
 echo "---"
 my_json="{\"data\": {\"type\": \"saveMsdpWebServerCert\", \"id\": \"${sts_hostname}\", \"attributes\": {\"certString\": \"${my_cert}\" }}}"
-echo "My Cert"
-echo ${my_cert}
+echo "My Json "
+echo ${my_json}
 echo "---"
 
 my_url="https://${primary_hostname}/netbackup/config/servers/msdp-servers"
