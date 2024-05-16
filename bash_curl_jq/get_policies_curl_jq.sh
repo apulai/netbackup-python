@@ -8,7 +8,7 @@ export nbu_api_content_type_v6="application/vnd.netbackup+json;version=6.0"
 
 read -p "Username:" Username
 echo -n "Password:"
-read -s "Password:" Password
+read -s Password
 
 #export Username=root
 #export Password='We!come10'
