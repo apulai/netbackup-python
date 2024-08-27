@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 # This call will disable invalid https certificate disable_warnings
 requests.urllib3.disable_warnings()
 
-nbu_api_key = "A8fmNjyB5DvvzAN1CnRWblMv160U1Vt5hs5P2fqj81pJh9224HRus-w9YuXnwSMa"
+nbu_api_key = "A7i_0xi-CmIzhDT4u-ch17MUSa7rXBZLVXcbIt5uzQWy7wUYHgCfgSUEp3DwVBR4"
 nbu_api_hostname = "nbuprimary.lab.local"
 nbu_api_baseurl = "https://" + nbu_api_hostname + ":1556/netbackup"
 asset_id = "84ba26e1-bd89-45c6-9ad4-196b0d8f9287"
@@ -14,7 +14,7 @@ nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
 nbu_api_content_type_v3 = "application/vnd.netbackup+json;version=3.0"
 
-nbu_api_multipartform_v5 = "application/vnd.netbackup+form-data;version=5.0;charset=UTF-8"
+nbu_api_multipartform_v5 = "multipart/vnd.netbackup+form-data;version=5.0;charset=UTF-8"
 
 header_v6 = {'Accept': nbu_api_content_type_v6,
              'Authorization': nbu_api_key,
@@ -48,37 +48,31 @@ def print_dict_path(path, obj):
         print(path + " =>", obj)
 
 
-myRecoveryRequest = {
-    "data": {
-        "type": "physicalFilesFoldersRecoveryRequest",
-        "attributes":
-            {
-                "recoveryPoint": {
-                    "client": "nbumedia.lab.local",
-                    "policyType": "STANDARD",
-                    "startDate": "2024-08-27T13:47:20.000Z",
-                    "endDate": "2024-08-27T13:47:20.000Z"
-                },
-                "recoveryOptions": {
-                    "server": "nbuprimary.lab.local",
-                    "destinationClient": "nbumedia.lab.local",
-                    "overwriteExistingFiles": False,
-                    "restrictMountPoints": False,
-                    "renameHardLinks": False,
-                    "renameSoftLinks": False,
-                    "accessControlAttributes": False,
-                    "jobPriorityOverride": 90000
-                }
-            }
-    }
-}
+myRecoveryRequest = {"data":
+                         {"type": "physicalFilesFoldersRecoveryRequest",
+                          "attributes":
+                              {"recoveryPoint":
+                                   {"client": "nbumedia.lab.local",
+                                    "policyType": "STANDARD",
+                                    "startDate": "2024-08-27T13:47:20.000Z",
+                                    "endDate": "2024-08-27T13:47:20.000Z"
+                                    },
+                               "recoveryOptions":
+                                   {"server": "nbuprimary.lab.local",
+                                    "destinationClient": "nbumedia.lab.local",
+                                    "overwriteExistingFiles": False,
+                                    "restrictMountPoints": False,
+                                    "renameHardLinks": False,
+                                    "renameSoftLinks": False,
+                                    "accessControlAttributes": False,
+                                    "jobPriorityOverride": 90000
+                                    }
+                               }
+                          }
+                     }
 
 mySelectionsFile = [
-    {
-        "path": "/etc/hosts",
-        "backupTime": "2024-08-27T13:47:20.000Z"
-    }
-]
+    {"path": "/etc/hosts", "backupTime": "2024-08-27T13:47:20.000Z"}]
 
 myRenameFile = [
     {
@@ -87,11 +81,19 @@ myRenameFile = [
     }
 ]
 
+print(json.dumps(myRecoveryRequest))
+print(json.dumps(mySelectionsFile))
+print(json.dumps(myRenameFile))
+
+
 multipart_form_data = {
     "recoveryRequest": ("blob", json.dumps(myRecoveryRequest), nbu_api_multipartform_v5),
     "selectionsFile": ("blob", json.dumps(mySelectionsFile), nbu_api_multipartform_v5),
     "renameFile": ("blob", json.dumps(myRenameFile), nbu_api_multipartform_v5)
 }
+
+print(multipart_form_data)
+
 
 print("POST to start restore ...", end=" ")
 response = requests.post(nbu_api_baseurl +
@@ -104,8 +106,7 @@ print(" done:", response.status_code)
 
 if response.status_code != 200:
     print("Error:", response)
-    quit(1)
+quit(1)
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
 print_dict_path('', parsed1)
-
