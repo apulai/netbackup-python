@@ -43,6 +43,8 @@ def print_dict_path(path, obj):
             print_dict_path(path + '[' + str(idx) + ']', item)
     else:
         print(path + " =>", obj)
+
+
 import json
 import requests
 from datetime import datetime, timedelta
@@ -59,7 +61,7 @@ nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
 nbu_api_content_type_v3 = "application/vnd.netbackup+json;version=3.0"
 
-nbu_api_content_type_multipartform=v5 = "multipart/vnd.netbackup+form-data;version=5.0"
+nbu_api_content_type_multipartform = v5 = "multipart/vnd.netbackup+form-data;version=5.0"
 
 header_v6 = {'Accept': nbu_api_content_type_v6,
              'Authorization': nbu_api_key,
@@ -92,49 +94,49 @@ def print_dict_path(path, obj):
     else:
         print(path + " =>", obj)
 
+
 myRecoveryRequest = {
-        "data" : {
-            "type": "physicalFilesFoldersRecoveryRequest",
-            "attributes":
-                {
-                    "recoveryPoint": {
-                        "client" : "nbumedia.lab.local",
-                        "policyType" : "STANDARD",
-                        "startDate" : "2024-08-27T13:47:20.000Z",
-                        "endDate": "2024-08-27T13:47:20.000Z"
-                    },
-                    "recoveryOptions": {
-                        "server": "nbuprimary.lab.local",
-                        "destinationClient": "nbumedia.lab.local",
-                        "overwriteExistingFiles": False,
-                        "restrictMountPoints": False,
-                        "renameHardLinks": False,
-                        "renameSoftLink": False,
-                        "accessControlAttributes": False,
-                        "jobPriorityOverride": 90000
-                    }
+    "data": {
+        "type": "physicalFilesFoldersRecoveryRequest",
+        "attributes":
+            {
+                "recoveryPoint": {
+                    "client": "nbumedia.lab.local",
+                    "policyType": "STANDARD",
+                    "startDate": "2024-08-27T13:47:20.000Z",
+                    "endDate": "2024-08-27T13:47:20.000Z"
+                },
+                "recoveryOptions": {
+                    "server": "nbuprimary.lab.local",
+                    "destinationClient": "nbumedia.lab.local",
+                    "overwriteExistingFiles": False,
+                    "restrictMountPoints": False,
+                    "renameHardLinks": False,
+                    "renameSoftLink": False,
+                    "accessControlAttributes": False,
+                    "jobPriorityOverride": 90000
                 }
-        }
+            }
     }
+}
 
 mySelectionsFile = [
     {
-        "path" : "/etc/hosts",
-         "backupTime" : "2024-08-27T13:47:20.000Z"
+        "path": "/etc/hosts",
+        "backupTime": "2024-08-27T13:47:20.000Z"
     }
 ]
 
-
 multipart_form_data = {
-    "recoveryRequest" : myRecoveryRequest,
-    "selectionsFile" : mySelectionsFile
+    "recoveryRequest": (blob, myRecoveryRequest),
+    "selectionsFile": (blob, mySelectionsFile)
 }
-print("GET vmware assets ...", end=" ")
+print("POST to start restore ...", end=" ")
 response = requests.post(nbu_api_baseurl +
-                        "/recovery/workloads/physical/scenarios/granular-files-folders/recover",
-                        files=multipart_form_data,
-                        verify=False,
-                        headers=header_v5)
+                         "/recovery/workloads/physical/scenarios/granular-files-folders/recover",
+                         files=multipart_form_data,
+                         verify=False,
+                         headers=header_v5)
 parsed1 = response.json()
 print(" done:", response.status_code)
 
@@ -143,7 +145,4 @@ if response.status_code != 200:
     quit(1)
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
-print_dict_path('',parsed1)
-
-
-
+print_dict_path('', parsed1)
