@@ -1,0 +1,101 @@
+{"data":{"type":"physicalFilesFoldersRecoveryRequest",
+"attributes":{"recoveryPoint":{"client":"nbumedia.lab.local","policyType":"STANDARD","startDate":"2024-08-27T13:47:20.000Z","endDate":"2024-08-27T13:47:20.000Z"},
+"recoveryOptions":{"server":"nbuprimary.lab.local","destinationClient":"nbumedia.lab.local","overwriteExistingFiles":false,"restrictMountPoints":false,"renameHardLinks":false,"renameSoftLinks":false,"accessControlAttributes":false,"jobPriorityOverride":90000}}}}
+
+
+[{"path":"/etc/hosts","backupTime":"2024-08-27T13:47:20.000Z"}]
+
+API
+A7i_0xi-CmIzhDT4u-ch17MUSa7rXBZLVXcbIt5uzQWy7wUYHgCfgSUEp3DwVBR4
+
+import requests
+
+cookies = {
+    'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuYnVfbWFzdGVyIiwianRpIjoiYWQ0NGFkNGEtZmMzZC00YmFlLTg0MWItYmZhM2JhNmM5YzUwIiwiaWF0IjoxNzI0NzY2MTc0NjkwLCJleHAiOjE3MjQ3ODA1NzQ2ODksInN1YiI6Im5idXByaW1hcnkubGFiLmxvY2FsOnJvb3Q6dW5peHB3ZCIsImF1dGhfdG9rZW4iOiJhZDQ0YWQ0YS1mYzNkLTRiYWUtODQxYi1iZmEzYmE2YzljNTAiLCJpc19hZG1pbiI6InRydWUiLCJpc19tYWNoaW5lIjoiZmFsc2UiLCJ0b2tlbl90eXBlIjoiU0VTU0lPTiIsInByaW5jaXBhbF90eXBlIjoiVVNFUiIsInVzZXJfbmFtZSI6InJvb3QiLCJkb21haW5fbmFtZSI6Im5idXByaW1hcnkubGFiLmxvY2FsIiwiZG9tYWluX3R5cGUiOiJ1bml4cHdkIiwiYW1yIjoiUFdEIn0.h09wlRGneGuXoFuyWZvdH0NA1pw5UbLOrzjUJCwi3tfdTCupxFS-j_HDuj0X-sUM5KgnJha24gRAVpV9HyNvRWXuF2_8lFXMkA4pp6KbwxemcVyWcrkYtx1JypnAkUoL8NCzha_TvnaWrZt7-GAlyyEYQuwl2zEgcTmRd3n6PzpX6OUaPD7-U_DZwD13j4YYx_IUw5KdMKz1_jt7OqLT7y9KrcMLMJ1Wr2AGFA4PqsBe3daImWKsmLY3WPXE1xqMCMqXy3GHADJuMtL8xe2tM_0mxsZXUr-vwki-2JkGLG5605PYDgzpxJk78YPWb07kpSDQ56rrlTNC5Va5xQjFSw',
+}
+
+headers = {
+    'Accept': 'application/vnd.netbackup+json;version=5.0',
+    'Accept-Language': 'en-US',
+    'Connection': 'keep-alive',
+    'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryYfOuJ0nw9iNgYxdt',
+    # 'Cookie': 'Authorization=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuYnVfbWFzdGVyIiwianRpIjoiYWQ0NGFkNGEtZmMzZC00YmFlLTg0MWItYmZhM2JhNmM5YzUwIiwiaWF0IjoxNzI0NzY2MTc0NjkwLCJleHAiOjE3MjQ3ODA1NzQ2ODksInN1YiI6Im5idXByaW1hcnkubGFiLmxvY2FsOnJvb3Q6dW5peHB3ZCIsImF1dGhfdG9rZW4iOiJhZDQ0YWQ0YS1mYzNkLTRiYWUtODQxYi1iZmEzYmE2YzljNTAiLCJpc19hZG1pbiI6InRydWUiLCJpc19tYWNoaW5lIjoiZmFsc2UiLCJ0b2tlbl90eXBlIjoiU0VTU0lPTiIsInByaW5jaXBhbF90eXBlIjoiVVNFUiIsInVzZXJfbmFtZSI6InJvb3QiLCJkb21haW5fbmFtZSI6Im5idXByaW1hcnkubGFiLmxvY2FsIiwiZG9tYWluX3R5cGUiOiJ1bml4cHdkIiwiYW1yIjoiUFdEIn0.h09wlRGneGuXoFuyWZvdH0NA1pw5UbLOrzjUJCwi3tfdTCupxFS-j_HDuj0X-sUM5KgnJha24gRAVpV9HyNvRWXuF2_8lFXMkA4pp6KbwxemcVyWcrkYtx1JypnAkUoL8NCzha_TvnaWrZt7-GAlyyEYQuwl2zEgcTmRd3n6PzpX6OUaPD7-U_DZwD13j4YYx_IUw5KdMKz1_jt7OqLT7y9KrcMLMJ1Wr2AGFA4PqsBe3daImWKsmLY3WPXE1xqMCMqXy3GHADJuMtL8xe2tM_0mxsZXUr-vwki-2JkGLG5605PYDgzpxJk78YPWb07kpSDQ56rrlTNC5Va5xQjFSw',
+    'Origin': 'https://nbuprimary.lab.local',
+    'Referer': 'https://nbuprimary.lab.local/webui/recovery/add/review',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+    'X-Client-ID': 'WebUI',
+    'sec-ch-ua': '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+}
+
+files = {
+    'recoveryRequest': ('blob', 
+'{
+"data":{
+	"type":"physicalFilesFoldersRecoveryRequest",
+	"attributes":{
+		"recoveryPoint":{
+			"client":"nbumedia.lab.local",
+			"policyType":"STANDARD",
+			"startDate":"2024-08-27T13:47:20.000Z",
+			"endDate":"2024-08-27T13:47:20.000Z"},
+		"recoveryOptions":{
+			"server":"nbuprimary.lab.local",
+			"destinationClient":"nbumedia.lab.local",
+			"overwriteExistingFiles":false,"restrictMountPoints":false,"renameHardLinks":false,"renameSoftLinks":false,"accessControlAttributes":false,"jobPriorityOverride":90000
+			}
+		}
+	}
+}', 'multipart/vnd.netbackup+form-data;version=5.0'),
+    'selectionsFile': ('blob', '[{"path":"/etc/hosts","backupTime":"2024-08-27T13:47:20.000Z"}]', 'multipart/vnd.netbackup+form-data;version=5.0'),
+}
+
+response = requests.post(
+    'https://nbuprimary.lab.local/netbackup/recovery/workloads/physical/scenarios/granular-files-folders/recover',
+    cookies=cookies,
+    headers=headers,
+    files=files,
+    verify=False,
+)
+
+--
+import requests
+
+cookies = {
+    'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuYnVfbWFzdGVyIiwianRpIjoiYWQ0NGFkNGEtZmMzZC00YmFlLTg0MWItYmZhM2JhNmM5YzUwIiwiaWF0IjoxNzI0NzY2MTc0NjkwLCJleHAiOjE3MjQ3ODA1NzQ2ODksInN1YiI6Im5idXByaW1hcnkubGFiLmxvY2FsOnJvb3Q6dW5peHB3ZCIsImF1dGhfdG9rZW4iOiJhZDQ0YWQ0YS1mYzNkLTRiYWUtODQxYi1iZmEzYmE2YzljNTAiLCJpc19hZG1pbiI6InRydWUiLCJpc19tYWNoaW5lIjoiZmFsc2UiLCJ0b2tlbl90eXBlIjoiU0VTU0lPTiIsInByaW5jaXBhbF90eXBlIjoiVVNFUiIsInVzZXJfbmFtZSI6InJvb3QiLCJkb21haW5fbmFtZSI6Im5idXByaW1hcnkubGFiLmxvY2FsIiwiZG9tYWluX3R5cGUiOiJ1bml4cHdkIiwiYW1yIjoiUFdEIn0.h09wlRGneGuXoFuyWZvdH0NA1pw5UbLOrzjUJCwi3tfdTCupxFS-j_HDuj0X-sUM5KgnJha24gRAVpV9HyNvRWXuF2_8lFXMkA4pp6KbwxemcVyWcrkYtx1JypnAkUoL8NCzha_TvnaWrZt7-GAlyyEYQuwl2zEgcTmRd3n6PzpX6OUaPD7-U_DZwD13j4YYx_IUw5KdMKz1_jt7OqLT7y9KrcMLMJ1Wr2AGFA4PqsBe3daImWKsmLY3WPXE1xqMCMqXy3GHADJuMtL8xe2tM_0mxsZXUr-vwki-2JkGLG5605PYDgzpxJk78YPWb07kpSDQ56rrlTNC5Va5xQjFSw',
+}
+
+headers = {
+    'Accept': 'application/vnd.netbackup+json;version=5.0',
+    'Accept-Language': 'en-US',
+    'Connection': 'keep-alive',
+    'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryYfOuJ0nw9iNgYxdt',
+    # 'Cookie': 'Authorization=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJuYnVfbWFzdGVyIiwianRpIjoiYWQ0NGFkNGEtZmMzZC00YmFlLTg0MWItYmZhM2JhNmM5YzUwIiwiaWF0IjoxNzI0NzY2MTc0NjkwLCJleHAiOjE3MjQ3ODA1NzQ2ODksInN1YiI6Im5idXByaW1hcnkubGFiLmxvY2FsOnJvb3Q6dW5peHB3ZCIsImF1dGhfdG9rZW4iOiJhZDQ0YWQ0YS1mYzNkLTRiYWUtODQxYi1iZmEzYmE2YzljNTAiLCJpc19hZG1pbiI6InRydWUiLCJpc19tYWNoaW5lIjoiZmFsc2UiLCJ0b2tlbl90eXBlIjoiU0VTU0lPTiIsInByaW5jaXBhbF90eXBlIjoiVVNFUiIsInVzZXJfbmFtZSI6InJvb3QiLCJkb21haW5fbmFtZSI6Im5idXByaW1hcnkubGFiLmxvY2FsIiwiZG9tYWluX3R5cGUiOiJ1bml4cHdkIiwiYW1yIjoiUFdEIn0.h09wlRGneGuXoFuyWZvdH0NA1pw5UbLOrzjUJCwi3tfdTCupxFS-j_HDuj0X-sUM5KgnJha24gRAVpV9HyNvRWXuF2_8lFXMkA4pp6KbwxemcVyWcrkYtx1JypnAkUoL8NCzha_TvnaWrZt7-GAlyyEYQuwl2zEgcTmRd3n6PzpX6OUaPD7-U_DZwD13j4YYx_IUw5KdMKz1_jt7OqLT7y9KrcMLMJ1Wr2AGFA4PqsBe3daImWKsmLY3WPXE1xqMCMqXy3GHADJuMtL8xe2tM_0mxsZXUr-vwki-2JkGLG5605PYDgzpxJk78YPWb07kpSDQ56rrlTNC5Va5xQjFSw',
+    'Origin': 'https://nbuprimary.lab.local',
+    'Referer': 'https://nbuprimary.lab.local/webui/recovery/add/review',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+    'X-Client-ID': 'WebUI',
+    'sec-ch-ua': '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+}
+
+files = {
+    'recoveryRequest': ('blob', '{"data":{"type":"physicalFilesFoldersRecoveryRequest","attributes":{"recoveryPoint":{"client":"nbumedia.lab.local","policyType":"STANDARD","startDate":"2024-08-27T13:47:20.000Z","endDate":"2024-08-27T13:47:20.000Z"},"recoveryOptions":{"server":"nbuprimary.lab.local","destinationClient":"nbumedia.lab.local","overwriteExistingFiles":false,"restrictMountPoints":false,"renameHardLinks":false,"renameSoftLinks":false,"accessControlAttributes":false,"jobPriorityOverride":90000}}}}', 'multipart/vnd.netbackup+form-data;version=5.0'),
+    'selectionsFile': ('blob', '[{"path":"/etc/hosts","backupTime":"2024-08-27T13:47:20.000Z"}]', 'multipart/vnd.netbackup+form-data;version=5.0'),
+}
+
+response = requests.post(
+    'https://nbuprimary.lab.local/netbackup/recovery/workloads/physical/scenarios/granular-files-folders/recover',
+    cookies=cookies,
+    headers=headers,
+    files=files,
+    verify=False,
+)
