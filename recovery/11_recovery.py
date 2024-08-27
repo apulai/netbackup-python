@@ -14,6 +14,8 @@ nbu_api_content_type_v6 = "application/vnd.netbackup+json;version=6.0"
 nbu_api_content_type_v5 = "application/vnd.netbackup+json;version=5.0;charset=UTF-8"
 nbu_api_content_type_v3 = "application/vnd.netbackup+json;version=3.0"
 
+nbu_api_multipartform_v5 = "application/vnd.netbackup+form-data;version=5.0;charset=UTF-8"
+
 header_v6 = {'Accept': nbu_api_content_type_v6,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v6}
@@ -63,7 +65,7 @@ myRecoveryRequest = {
                     "overwriteExistingFiles": False,
                     "restrictMountPoints": False,
                     "renameHardLinks": False,
-                    "renameSoftLink": False,
+                    "renameSoftLinks": False,
                     "accessControlAttributes": False,
                     "jobPriorityOverride": 90000
                 }
@@ -86,9 +88,9 @@ myRenameFile = [
 ]
 
 multipart_form_data = {
-    "recoveryRequest": ("blob", json.dumps(myRecoveryRequest)),
-    "selectionsFile": ("blob", json.dumps(mySelectionsFile)),
-    "renameFile": ("blob", json.dumps(myRenameFile))
+    "recoveryRequest": ("blob", json.dumps(myRecoveryRequest), nbu_api_multipartform_v5),
+    "selectionsFile": ("blob", json.dumps(mySelectionsFile), nbu_api_multipartform_v5),
+    "renameFile": ("blob", json.dumps(myRenameFile), nbu_api_multipartform_v5)
 }
 
 print("POST to start restore ...", end=" ")
@@ -106,3 +108,4 @@ if response.status_code != 200:
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
 print_dict_path('', parsed1)
+
