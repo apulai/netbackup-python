@@ -122,7 +122,7 @@ print_dict_path('', parsed1)
 
 if response.status_code != 201:
     print("We had some error:", response)
-else
+else:
     print("Success.")
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
