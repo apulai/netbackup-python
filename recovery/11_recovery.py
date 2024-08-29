@@ -1,3 +1,6 @@
+# copy cURL in chrome then
+# https://curlconverter.com/
+
 import json
 import requests
 from datetime import datetime, timedelta
@@ -28,6 +31,14 @@ header_v3 = {'Accept': nbu_api_content_type_v3,
              'Authorization': nbu_api_key,
              'Content-Type': nbu_api_content_type_v3}
 
+form_v5 = {'Accept': nbu_api_content_type_v5,
+             'Authorization': nbu_api_key,
+             'Content-Type': nbu_api_multipartform_v5}
+
+
+form_v5_nocontenttype = {'Accept': nbu_api_content_type_v5,
+             'Authorization': nbu_api_key,
+             }
 
 # This helper function will print the parsed json (dictionary)
 # in an easy to use format.
@@ -81,6 +92,7 @@ myRenameFile = [
     }
 ]
 
+print()
 print(json.dumps(myRecoveryRequest))
 print(json.dumps(mySelectionsFile))
 print(json.dumps(myRenameFile))
@@ -92,21 +104,26 @@ multipart_form_data = {
     "renameFile": ("blob", json.dumps(myRenameFile), nbu_api_multipartform_v5)
 }
 
+print()
 print(multipart_form_data)
 
+print()
+print("Sending POST to start restore ...", end=" ")
 
-print("POST to start restore ...", end=" ")
 response = requests.post(nbu_api_baseurl +
                          "/recovery/workloads/physical/scenarios/granular-files-folders/recover",
                          files=multipart_form_data,
                          verify=False,
-                         headers=header_v5)
+                         headers=form_v5_nocontenttype)
 parsed1 = response.json()
 print(" done:", response.status_code)
 
-if response.status_code != 200:
-    print("Error:", response)
-quit(1)
+print_dict_path('', parsed1)
+
+if response.status_code != 201:
+    print("We had some error:", response)
+else
+    print("Success.")
 # print(json.dumps(parsed1, indent=4, sort_keys=True))
 # print(type(response), type(parsed1))
-print_dict_path('', parsed1)
+#print_dict_path('', parsed1)
